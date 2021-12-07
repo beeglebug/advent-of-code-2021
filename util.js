@@ -7,3 +7,7 @@ exports.getInput = (dir) => {
     .toString()
     .split("\n");
 };
+
+exports.sum = (arr) => arr.reduce((total, num) => total + num);
+
+exports.arr = (size) => new Array(size).fill(0);

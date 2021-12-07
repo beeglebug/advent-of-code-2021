@@ -1,4 +1,4 @@
-const { getInput } = require("../util");
+const { getInput, arr } = require("../util");
 
 // prettier-ignore
 const lines = getInput(__dirname)
@@ -9,7 +9,6 @@ const lines = getInput(__dirname)
     Math.sign(y2 - y1),
   ]);
 
-const arr = (size) => new Array(size).fill(0);
 const count = (grid) => grid.filter((i) => i > 1).length;
 
 const traverse = (grid, x1, y1, x2, y2, sx, sy) => {

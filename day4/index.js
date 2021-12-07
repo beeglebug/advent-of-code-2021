@@ -48,7 +48,6 @@ const column = (board, i) => [
   board[4][i],
 ];
 const allNull = (items) => items.every((item) => item === null);
-const notNull = (item) => item !== null;
 
 const markNumber = (board, call) =>
   board.map((row) => row.map((number) => (number === call ? null : number)));

@@ -18,8 +18,9 @@ const scores = {
 };
 
 const corruptedScore = (row) => {
-  const queue = [row.shift()];
-  for (let char of row) {
+  const queue = [row[0]];
+  for (let i = 1; i < row.length; i++) {
+    const char = row[i];
     if (isOpen(char)) {
       queue.push(char);
     } else {
@@ -81,6 +82,5 @@ const test = [
   "<{([{{}}[<[[[<>{}]]]>[]]",
 ].map((row) => row.split(""));
 
-// console.log(part2(test));
-
-console.log(part1(input), part2(input));
+console.log(part1(input));
+console.log(part2(input));

@@ -3,7 +3,6 @@ const { getInput, sum, createGraph, getNeighbours, run } = require("../util");
 const input = getInput(__dirname).map((row) => row.split("").map(Number));
 
 const isOpen = (node) => node.value !== 9 && node.id === undefined;
-const isConnected = (value) => (node) => Math.abs(node.value - value) === 1;
 
 const step = (graph, id) => {
   const start = graph.data.flat().find(isOpen);
@@ -13,9 +12,7 @@ const step = (graph, id) => {
     const current = queue.shift();
     current.id = id;
     const neighbours = getNeighbours(graph, current.x, current.y);
-    const connected = neighbours
-      .filter(isOpen)
-      .filter(isConnected(current.value));
+    const connected = neighbours.filter(isOpen);
     queue.push(...connected);
   }
   return true;
@@ -54,12 +51,5 @@ function part2(input) {
     .reduce((a, b) => a * b);
 }
 
-const test = [
-  "2199943210",
-  "3987894921",
-  "9856789892",
-  "8767896789",
-  "9899965678",
-].map((row) => row.split("").map(Number));
-
+// run("part 1", part1, input);
 run("part 2", part2, input);

@@ -10,7 +10,7 @@ exports.getInput = (dir) => {
 
 exports.sum = (arr) => arr.reduce((total, num) => total + num, 0);
 
-exports.arr = (size, fill = 0) => new Array(size).fill(0);
+exports.arr = (size, fill = 0) => new Array(size).fill(fill);
 
 exports.range = (start, end) =>
   new Array(end - start).fill().map((_, i) => i + start);
@@ -66,4 +66,12 @@ exports.getNeighbours = (map, x, y, diagonal = false) => {
   }
 
   return neighbours;
+};
+
+exports.run = (name, fn, input) => {
+  const time = process.hrtime();
+  const output = fn(input);
+  const diff = process.hrtime(time);
+  const ms = ((diff[0] + diff[1] / 1e9) * 1000).toFixed(2);
+  console.log(`${name}: ${output} (${ms}ms)`);
 };

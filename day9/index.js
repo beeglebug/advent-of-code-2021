@@ -1,29 +1,25 @@
-const { getInput, sum } = require("../util");
+const { getInput, sum, createGraph, getNeighbours, run } = require("../util");
 
 const input = getInput(__dirname).map((row) => row.split("").map(Number));
-const width = 100;
-const height = 100;
 
-function createGraph(input) {
-  const graph = { width, height, data: [] };
-  for (let y = 0; y < height; y++) {
-    graph.data[y] = [];
-    for (let x = 0; x < width; x++) {
-      const value = input[y][x];
-      graph.data[y][x] = { x, y, value };
-    }
+const isOpen = (node) => node.value !== 9 && node.id === undefined;
+const isConnected = (value) => (node) => Math.abs(node.value - value) === 1;
+
+const step = (graph, id) => {
+  const start = graph.data.flat().find(isOpen);
+  if (start === undefined) return false;
+  const queue = [start];
+  while (queue.length) {
+    const current = queue.shift();
+    current.id = id;
+    const neighbours = getNeighbours(graph, current.x, current.y);
+    const connected = neighbours
+      .filter(isOpen)
+      .filter(isConnected(current.value));
+    queue.push(...connected);
   }
-  return graph;
-}
-
-function getNeighbours(map, x, y) {
-  const neighbours = [];
-  if (x > 0) neighbours.push(map.data[y][x - 1]);
-  if (x < width - 1) neighbours.push(map.data[y][x + 1]);
-  if (y > 0) neighbours.push(map.data[y - 1][x]);
-  if (y < height - 1) neighbours.push(map.data[y + 1][x]);
-  return neighbours;
-}
+  return true;
+};
 
 function part1(input) {
   const graph = createGraph(input);
@@ -40,6 +36,30 @@ function part1(input) {
   return sum(low);
 }
 
-function part2(input) {}
+function part2(input) {
+  const graph = createGraph(input);
+  let id = 0;
+  while (true) {
+    const foundIsland = step(graph, id++);
+    if (foundIsland === false) break;
+  }
+  return Object.values(
+    graph.data.flat().reduce((byId, node) => {
+      if (node.id !== undefined) byId[node.id] = (byId[node.id] || 0) + 1;
+      return byId;
+    }, {})
+  )
+    .sort((a, b) => a - b)
+    .slice(-3)
+    .reduce((a, b) => a * b);
+}
 
-console.log(part1(input), part2(input));
+const test = [
+  "2199943210",
+  "3987894921",
+  "9856789892",
+  "8767896789",
+  "9899965678",
+].map((row) => row.split("").map(Number));
+
+run("part 2", part2, input);
